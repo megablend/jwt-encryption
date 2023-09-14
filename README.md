@@ -1,2 +1,14 @@
 # jwt-encryption
+[![GoDoc](https://img.shields.io/badge/api-Godoc-blue.svg)][godoc]
+[![Go Report Card](https://goreportcard.com/badge/github.com/jxskiss/gopkg/v2)][goreport]
+[![Issues](https://img.shields.io/github/issues/megablend/jwt-encryption.svg)][issues]
+[![GitHub release](http://img.shields.io/github/release/megablend/jwt-encryption.svg)][release]
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg)][license]
+
+[godoc]: https://pkg.go.dev/github.com/megablend/jwt-encryption
+[goreport]: https://goreportcard.com/report/github.com/megablend/jwt-encryption
+[issues]: https://github.com/megablend/jwt-encryption/issues
+[release]: https://github.com/megablend/jwt-encryption/releases
+[license]: https://github.com/megablend/jwt-encryption/blob/master/LICENSE
+
 Provides JWT and JWE encryption with RSA keys
