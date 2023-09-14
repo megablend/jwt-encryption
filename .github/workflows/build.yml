@@ -1,4 +1,4 @@
-name: Golang JWT Encryption Job
+name: JWT Encryption Job
 
 on:
   push:
