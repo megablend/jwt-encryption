@@ -1,4 +1,4 @@
-name: Golang JWT Encryption Job
+name: JWT/JWE Encryption
 
 on:
   push:
@@ -29,6 +29,12 @@ jobs:
         go version
         go get -u golang.org/x/lint/golint
     
-    # Run testing on the code
+    # Run unit test
     - name: Run testing
       run: go test -v -cover ./... -gcflags=all=-l
+
+    # Upload coverage report
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

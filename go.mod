@@ -12,7 +12,6 @@ require (
 
 require (
 	bou.ke/monkey v1.0.2
-	github.com/procodr/monkey v0.0.0-20221102224215-28eb53c3a645
 	github.com/stretchr/testify v1.8.4
 	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
 	gopkg.in/yaml.v2 v2.4.0
