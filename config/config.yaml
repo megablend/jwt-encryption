@@ -1,0 +1,4 @@
+jwt:
+  private-key: private_key.pem
+  public-key: public_key.pem
+  keys-directory: config/keys

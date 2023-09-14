@@ -1,0 +1,34 @@
+name: Golang JWT Encryption Job
+
+on:
+  push:
+    branches:
+    - master
+    - 'release/**'
+  pull_request:
+    branches:
+    - master
+    - 'release/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    # Setup Go
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: '1.17.0'
+    
+    # Install all the dependencies
+    - name: Install dependencies
+      run: |
+        go version
+        go get -u golang.org/x/lint/golint
+    
+    # Run testing on the code
+    - name: Run testing
+      run: go test -v -cover ./... -gcflags=all=-l
