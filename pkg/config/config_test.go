@@ -11,9 +11,10 @@ import (
 )
 
 func patchOsOpen(message string) {
-	monkey.Patch(os.Open, func(_ string) (*os.File, error) {
-		return nil, errors.New(message)
-	})
+	monkey.Patch(os.Open,
+		func(_ string) (*os.File, error) {
+			return nil, errors.New(message)
+		})
 }
 
 func TestNew_shouldReturnValidDetails(t *testing.T) {
@@ -40,10 +41,10 @@ func TestNew_shouldReturnValidDetails(t *testing.T) {
 
 func TestNew_shouldReturnError_whenUnableToReadFile(t *testing.T) {
 	errMsg := "test error message while opening file"
-	err := os.Setenv(BASE_PATH, "/path/to/config")
-
 	defer monkey.UnpatchAll()
 	patchOsOpen(errMsg)
+
+	err := os.Setenv(BASE_PATH, "/path/to/config")
 
 	config, configErr := New()
 
