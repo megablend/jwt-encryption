@@ -2,18 +2,16 @@ package config
 
 import (
 	"errors"
-	"log"
 	"os"
 	"testing"
 
-	"github.com/procodr/monkey"
+	"bou.ke/monkey"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func patchOsOpen(message string) {
 	monkey.Patch(os.Open, func(_ string) (*os.File, error) {
-		log.Println("got here")
 		return nil, errors.New(message)
 	})
 }
