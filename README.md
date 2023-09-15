@@ -22,7 +22,7 @@ the underlying concept of generating encrypted tokens for developers.
 Install Wire by running:
 
 ```bash
-go install github.com/megablend/jwt-encryption/cmd/jwt-encryption@latest
+go get github.com/megablend/jwt-encryption@v0.1.0
 ```
 
 and ensuring that `$GOPATH/bin` is added to your `$PATH`.
