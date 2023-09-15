@@ -31,7 +31,7 @@ jobs:
     
     # Run unit test
     - name: Run testing
-      run: go test -v -cover ./... -gcflags=all=-l
+      run: go test -v -cover -coverprofile=coverage.out ./... -gcflags=all=-l
 
     # Upload coverage report
     - name: Upload coverage reports to Codecov
