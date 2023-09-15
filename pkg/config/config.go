@@ -19,11 +19,13 @@ const (
 var config *Config
 
 type Config struct {
-	Jwt struct {
-		PrivateKey string `yaml:"private-key"`
-		PublicKey  string `yaml:"public-key"`
-		Directory  string `yaml:"keys-directory"`
-	}
+	Jwt Jwt
+}
+
+type Jwt struct {
+	PrivateKey string `yaml:"private-key"`
+	PublicKey  string `yaml:"public-key"`
+	Directory  string `yaml:"keys-directory"`
 }
 
 func (config *Config) readConfigFile() (*os.File, error) {
