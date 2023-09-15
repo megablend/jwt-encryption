@@ -97,7 +97,7 @@ func TestParseToken_shouldReturnDecryptedToken(t *testing.T) {
 	}
 
 	rawToken, signerErr := encrypt.SignedToken(params)
-	claims, err := encrypt.ParseToken(rawToken)
+	claims, err := encrypt.ParseToken(rawToken, key.JWT)
 
 	require.NoError(t, signerErr)
 	require.NoError(t, configErr)

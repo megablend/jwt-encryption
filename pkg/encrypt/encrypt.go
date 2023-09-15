@@ -10,6 +10,8 @@ import (
 	"gopkg.in/square/go-jose.v2/jwt"
 )
 
+// A Encrypt allows users to call the SignedToken method to provide token encryption
+// or ParseToken to decrypt/parse a raw token base on chosen encryption type (JWT/JWE)
 type Encrypt struct {
 	key *key.Key
 }
@@ -29,6 +31,30 @@ type Param struct {
 // It takes the parameter argument which provides details of the issuer, subject, headers and claims
 // As part of the parameters you are required to provide the encryption type whihc is either JWT or JWE
 func (e *Encrypt) SignedToken(param *Param) (string, error) {
+	switch param.EncyrptionType {
+	case key.JWT: // sign JWT related tokens
+		return e.signJWT(param)
+	case key.JWE: // sign JWE related tokens
+		panic("nothing exists for JWE")
+	default:
+		panic("invalid encryption type provided")
+	}
+}
+
+// ParseToken decrypts/parse the provided raw token signed using the configured RSA keys
+func (e *Encrypt) ParseToken(token string, encyrptionType key.SignerType) (map[string]interface{}, error) {
+	switch encyrptionType {
+	case key.JWT: // parses JWT related tokens
+		return e.parseJWT(token)
+	case key.JWE: // parses JWE related tokens
+		panic("nothing exists for JWE")
+	default:
+		panic("invalid encryption type provided")
+	}
+}
+
+// signJWT signs JWT related tokens
+func (e *Encrypt) signJWT(param *Param) (string, error) {
 	// valdiate the details for the provided params
 	if valid, err := e.isValidParams(param); !valid {
 		return "", err
@@ -61,8 +87,7 @@ func (e *Encrypt) isValidParams(params *Param) (bool, error) {
 	return true, nil
 }
 
-// ParseToken decrypts/parse the provided raw token signed using the configured RSA keys
-func (e *Encrypt) ParseToken(token string) (map[string]interface{}, error) {
+func (e *Encrypt) parseJWT(token string) (map[string]interface{}, error) {
 	parsedToken, err := jwt.ParseSigned(token)
 	if err != nil {
 		return nil, err
@@ -116,7 +141,8 @@ func (e *Encrypt) buildClaims(param *Param, signer jose.Signer) jwt.Builder {
 	return builder.Claims(builderClaims).Claims(param.Claims)
 }
 
-// New returns a new encryption object
+// New returns a new encryption object when provided a key instance
+// with details of the RSA private and public keys
 func New(key *key.Key) *Encrypt {
 	return &Encrypt{
 		key: key,
