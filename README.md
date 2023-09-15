@@ -13,4 +13,29 @@
 [release]: https://github.com/megablend/jwt-encryption/releases
 [license]: https://github.com/megablend/jwt-encryption/blob/master/LICENSE
 
-Provides JWT and JWE encryption with RSA keys
+jwt-encryption aims to serve as a one-stop-shop for providing both JWT and JWE token
+encryption using RSA keys. The implementation abstracts the difficulties of understanding
+the underlying concept of generating encrypted tokens for developers.
+
+## Installing
+
+Install Wire by running:
+
+```bash
+go install github.com/megablend/jwt-encryption/cmd/jwt-encryption@latest
+```
+
+and ensuring that `$GOPATH/bin` is added to your `$PATH`.
+
+## Documentation
+
+- [Usage][]
+- [FAQ][]
+
+[Usage]: ./docs/usage.md
+[FAQ]: ./docs/faq.md
+
+## Project status
+
+As of version v0.1.0, jwt-encryption is *beta* and is not considered feature complete. It
+works well for the JWT encryption, and we prefer to keep it as simple as possible.
