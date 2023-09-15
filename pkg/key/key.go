@@ -1,6 +1,7 @@
 package key
 
 import (
+	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
@@ -17,7 +18,9 @@ import (
 )
 
 type Key struct {
-	Config *config.Config
+	config     *config.Config
+	privateKey *rsa.PrivateKey
+	publicKey  *rsa.PublicKey
 }
 
 type SignerType int
@@ -40,7 +43,11 @@ const (
 
 // PrivateKey returns a private key object from the configured path
 func (k *Key) PrivateKey() (*rsa.PrivateKey, error) {
-	bytes, err := k.getFileBytes(k.Config.Jwt.Directory, k.Config.Jwt.PrivateKey)
+	if k.privateKey != nil {
+		return k.privateKey, nil
+	}
+
+	bytes, err := k.getFileBytes(k.config.Jwt.Directory, k.config.Jwt.PrivateKey)
 	if err != nil {
 		return nil, err
 	}
@@ -54,11 +61,17 @@ func (k *Key) PrivateKey() (*rsa.PrivateKey, error) {
 	if err != nil {
 		return nil, err
 	}
-	return key, nil
+
+	k.privateKey = key
+	return k.privateKey, nil
 }
 
 func (k *Key) PublicKey() (*rsa.PublicKey, error) {
-	bytes, err := k.getFileBytes(k.Config.Jwt.Directory, k.Config.Jwt.PublicKey)
+	if k.publicKey != nil {
+		return k.publicKey, nil
+	}
+
+	bytes, err := k.getFileBytes(k.config.Jwt.Directory, k.config.Jwt.PublicKey)
 	if err != nil {
 		return nil, err
 	}
@@ -70,8 +83,10 @@ func (k *Key) PublicKey() (*rsa.PublicKey, error) {
 
 	key, ok := cert.PublicKey.(*rsa.PublicKey)
 	if !ok {
-		return nil, errors.New("unable to parse certificate into a private key")
+		return nil, errors.New("unable to parse certificate into a public key")
 	}
+
+	k.publicKey = key
 	return key, nil
 }
 
@@ -95,6 +110,17 @@ func (k *Key) Signer(headers map[string]string, algorithm jose.SignatureAlgorith
 	}
 
 	return jose.NewSigner(signerKey, &signerOpts)
+}
+
+func (k *Key) generateKeys() error {
+	privateKey, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		return err
+	}
+
+	k.privateKey = privateKey
+	k.publicKey = &privateKey.PublicKey
+	return nil
 }
 
 func (k *Key) getBlockBytes(bytes []byte) ([]byte, error) {
@@ -151,7 +177,7 @@ func (k *Key) getBasePath(keyPath string) (string, error) {
 			return "", errors.New("invalid configuration folder path configured")
 		}
 
-		basePath := strings.ReplaceAll(dir, subDir, k.Config.Jwt.Directory)
+		basePath := strings.ReplaceAll(dir, subDir, k.config.Jwt.Directory)
 		// ensure that the final base path is valid
 		if _, err := os.Stat(basePath); os.IsNotExist(err) {
 			return "", errors.New("invalid configuration base path")
@@ -163,7 +189,17 @@ func (k *Key) getBasePath(keyPath string) (string, error) {
 }
 
 func New(config *config.Config) *Key {
-	return &Key{
-		Config: config,
+	k := &Key{
+		config: config,
 	}
+
+	if k.config.Jwt.GenerateKeys {
+		var err error
+		err = k.generateKeys()
+		if err != nil {
+			logger.Fatal("failed to generate RSA keys as specified in the configuration file")
+			return nil
+		}
+	}
+	return k
 }

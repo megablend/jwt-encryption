@@ -23,9 +23,10 @@ type Config struct {
 }
 
 type Jwt struct {
-	PrivateKey string `yaml:"private-key"`
-	PublicKey  string `yaml:"public-key"`
-	Directory  string `yaml:"keys-directory"`
+	PrivateKey   string `yaml:"private-key"`
+	PublicKey    string `yaml:"public-key"`
+	Directory    string `yaml:"keys-directory"`
+	GenerateKeys bool   `yaml:"generate-keys"`
 }
 
 func (config *Config) readConfigFile() (*os.File, error) {

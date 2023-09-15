@@ -33,8 +33,56 @@ func TestSignedToken_shouldReturnValidToken(t *testing.T) {
 	assert.True(t, len(strings.Split(token, ".")) == 3)
 }
 
+func TestSignedToken_shouldReturnError(t *testing.T) {
+	cases := []struct {
+		name   string
+		config *config.Config
+		params *Params
+	}{
+		{"when missing audience", &config.Config{}, &Params{
+			Subject: "test/subject",
+		}},
+		{"when missing subject", &config.Config{}, &Params{
+			Audience: "test/audience",
+		}},
+		{"when missing algorithm", &config.Config{}, &Params{
+			Audience: "test/audience",
+			Subject:  "test/subject",
+		}},
+	}
+
+	for _, testCase := range cases {
+		t.Run(testCase.name, func(t *testing.T) {
+			encrypt := New(key.New(testCase.config))
+
+			token, err := encrypt.SignedToken(testCase.params)
+
+			assert.Error(t, err)
+			assert.Empty(t, token)
+		})
+	}
+}
+
+func TestSignedToken_shouldReturnError_whenInvalidConfig(t *testing.T) {
+	encrypt := New(key.New(&config.Config{}))
+	params := &Params{
+		Audience: "test/audience",
+		Subject:  "test/subject",
+		Claims: map[string]interface{}{
+			"service": "sample_service",
+		},
+		Algorithm:      jose.RS256,
+		EncyrptionType: key.JWT,
+		Ttl:            2000,
+	}
+
+	token, err := encrypt.SignedToken(params)
+
+	assert.Error(t, err)
+	assert.Empty(t, token)
+}
+
 func TestParseToken_shouldReturnDecryptedToken(t *testing.T) {
-	t.Skip("FIXME: change RSA key to supported type")
 	config, configErr := config.New()
 	encrypt := New(key.New(config))
 	params := &Params{
@@ -48,10 +96,12 @@ func TestParseToken_shouldReturnDecryptedToken(t *testing.T) {
 		Ttl:            2000,
 	}
 
-	rawToken, _ := encrypt.SignedToken(params)
+	rawToken, signerErr := encrypt.SignedToken(params)
 	claims, err := encrypt.ParseToken(rawToken)
 
+	require.NoError(t, signerErr)
 	require.NoError(t, configErr)
+	require.NotNil(t, rawToken)
 	assert.NoError(t, err)
 	assert.NotNil(t, claims)
 }

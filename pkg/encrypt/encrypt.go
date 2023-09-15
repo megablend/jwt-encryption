@@ -66,7 +66,7 @@ func (e *Encrypt) ParseToken(token string) (map[string]interface{}, error) {
 		return nil, err
 	}
 
-	err = parsedToken.Claims(key.PublicKey, claims)
+	err = parsedToken.Claims(&key.PublicKey, &claims)
 	if err != nil {
 		return nil, err
 	}
@@ -84,8 +84,9 @@ func (e *Encrypt) isTokenExpired(claims map[string]interface{}) (bool, error) {
 		return true, errors.New("missing expiration key in token parsed claim")
 	}
 
-	exp := expiry.(jwt.NumericDate)
-	if expired := exp.Time().UTC().Before(time.Now().UTC()); expired {
+	convertedExp := expiry.(float64)
+	exp := time.Unix(int64(convertedExp), 0)
+	if expired := exp.UTC().Before(time.Now().UTC()); expired {
 		return true, errors.New("token has expired")
 	}
 

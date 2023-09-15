@@ -20,6 +20,23 @@ func TestPrivateKey_shouldReturnValidKey(t *testing.T) {
 	assert.NotNil(t, privateKey)
 }
 
+func TestPrivateKey_shouldReadFromFile_whenGenerateKeyIsFalse(t *testing.T) {
+	config := &config.Config{
+		Jwt: config.Jwt{
+			PrivateKey:   "private_key.pem",
+			PublicKey:    "public_key.pem",
+			Directory:    "config/keys",
+			GenerateKeys: false,
+		},
+	}
+	key := New(config)
+
+	privateKey, keyErr := key.PrivateKey()
+
+	assert.NoError(t, keyErr)
+	assert.NotNil(t, privateKey)
+}
+
 func TestPrivateKey_shouldReturnError(t *testing.T) {
 	cases := []struct {
 		name   string
@@ -52,6 +69,23 @@ func TestPublicKey_shouldReturnValidKey(t *testing.T) {
 	publicKey, keyErr := key.PublicKey()
 
 	require.NoError(t, configErr)
+	assert.NoError(t, keyErr)
+	assert.NotNil(t, publicKey)
+}
+
+func TestPublicKey_shouldReadFromFile_whenGenerateKeyIsFalse(t *testing.T) {
+	config := &config.Config{
+		Jwt: config.Jwt{
+			PrivateKey:   "private_key.pem",
+			PublicKey:    "public_key.pem",
+			Directory:    "config/keys",
+			GenerateKeys: false,
+		},
+	}
+	key := New(config)
+
+	publicKey, keyErr := key.PublicKey()
+
 	assert.NoError(t, keyErr)
 	assert.NotNil(t, publicKey)
 }

@@ -35,6 +35,7 @@ func TestNew_shouldReturnValidDetails(t *testing.T) {
 			assert.EqualValues(t, "private_key.pem", config.Jwt.PrivateKey)
 			assert.EqualValues(t, "public_key.pem", config.Jwt.PublicKey)
 			assert.EqualValues(t, "config/keys", config.Jwt.Directory)
+			assert.True(t, config.Jwt.GenerateKeys)
 		})
 	}
 }
