@@ -66,6 +66,7 @@ func (k *Key) PrivateKey() (*rsa.PrivateKey, error) {
 	return k.privateKey, nil
 }
 
+// PublicKey returns a public key object from the configured path
 func (k *Key) PublicKey() (*rsa.PublicKey, error) {
 	if k.publicKey != nil {
 		return k.publicKey, nil
@@ -188,6 +189,8 @@ func (k *Key) getBasePath(keyPath string) (string, error) {
 	return keyPath, nil
 }
 
+// New returns a new instance of key with private and public key
+// If the configuration requires a new set of keys generated, it will generate them accordingly
 func New(config *config.Config) *Key {
 	k := &Key{
 		config: config,

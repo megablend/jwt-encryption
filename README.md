@@ -3,14 +3,12 @@
 [![GoDoc](https://img.shields.io/badge/api-Godoc-blue.svg)][godoc]
 [![Coverage](https://codecov.io/gh/megablend/jwt-encryption/branch/master/graph/badge.svg)][coverage]
 [![Issues](https://img.shields.io/github/issues/megablend/jwt-encryption.svg)][issues]
-[![GitHub release](http://img.shields.io/github/release/megablend/jwt-encryption.svg)][release]
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg)][license]
 
 [build]: https://github.com/megablend/jwt-encryption/actions
 [godoc]: https://pkg.go.dev/github.com/megablend/jwt-encryption
 [coverage]: https://codecov.io/gh/megablend/jwt-encryption
 [issues]: https://github.com/megablend/jwt-encryption/issues
-[release]: https://github.com/megablend/jwt-encryption/releases
 [license]: https://github.com/megablend/jwt-encryption/blob/master/LICENSE
 
 jwt-encryption aims to serve as a one-stop-shop for providing both JWT and JWE token
@@ -19,7 +17,7 @@ the underlying concept of generating encrypted tokens for developers.
 
 ## Installing
 
-Install Wire by running:
+Install jwt-encryption by running:
 
 ```bash
 go get github.com/megablend/jwt-encryption@v0.1.0

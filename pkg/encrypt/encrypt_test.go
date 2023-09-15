@@ -14,7 +14,7 @@ import (
 func TestSignedToken_shouldReturnValidToken(t *testing.T) {
 	config, configErr := config.New()
 	encrypt := New(key.New(config))
-	params := &Params{
+	params := &Param{
 		Audience: "test/audience",
 		Subject:  "test/subject",
 		Claims: map[string]interface{}{
@@ -37,15 +37,15 @@ func TestSignedToken_shouldReturnError(t *testing.T) {
 	cases := []struct {
 		name   string
 		config *config.Config
-		params *Params
+		params *Param
 	}{
-		{"when missing audience", &config.Config{}, &Params{
+		{"when missing audience", &config.Config{}, &Param{
 			Subject: "test/subject",
 		}},
-		{"when missing subject", &config.Config{}, &Params{
+		{"when missing subject", &config.Config{}, &Param{
 			Audience: "test/audience",
 		}},
-		{"when missing algorithm", &config.Config{}, &Params{
+		{"when missing algorithm", &config.Config{}, &Param{
 			Audience: "test/audience",
 			Subject:  "test/subject",
 		}},
@@ -65,7 +65,7 @@ func TestSignedToken_shouldReturnError(t *testing.T) {
 
 func TestSignedToken_shouldReturnError_whenInvalidConfig(t *testing.T) {
 	encrypt := New(key.New(&config.Config{}))
-	params := &Params{
+	params := &Param{
 		Audience: "test/audience",
 		Subject:  "test/subject",
 		Claims: map[string]interface{}{
@@ -85,7 +85,7 @@ func TestSignedToken_shouldReturnError_whenInvalidConfig(t *testing.T) {
 func TestParseToken_shouldReturnDecryptedToken(t *testing.T) {
 	config, configErr := config.New()
 	encrypt := New(key.New(config))
-	params := &Params{
+	params := &Param{
 		Audience: "test/audience",
 		Subject:  "test/subject",
 		Claims: map[string]interface{}{
