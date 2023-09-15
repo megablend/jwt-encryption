@@ -20,10 +20,8 @@ the underlying concept of generating encrypted tokens for developers.
 Install jwt-encryption by running:
 
 ```bash
-go get github.com/megablend/jwt-encryption@v0.1.0
+go get github.com/megablend/jwt-encryption@v0.1.1
 ```
-
-and ensuring that `$GOPATH/bin` is added to your `$PATH`.
 
 ## Documentation
 
@@ -35,5 +33,5 @@ and ensuring that `$GOPATH/bin` is added to your `$PATH`.
 
 ## Project status
 
-As of version v0.1.0, jwt-encryption is *beta* and is not considered feature complete. It
+As of version v0.1.1, jwt-encryption is *beta* and is not considered feature complete. It
 works well for the JWT encryption, and we prefer to keep it as simple as possible.
